@@ -1,3 +1,7 @@
+"""
+    DeviceAtlas API and data installation automatizer.
+
+"""
 import os, sys
 
 from mobile.sniffer import base

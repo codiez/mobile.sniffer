@@ -1,3 +1,9 @@
+"""
+
+    Unit tests settings for mobile.sniffer.wapprofile
+
+"""
+
 DEBUG = True
 
 DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.

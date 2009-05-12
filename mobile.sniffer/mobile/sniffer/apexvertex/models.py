@@ -1,7 +1,20 @@
+"""
+    Apex Vertex database SQL mappings and query functions.
+
+    http://www.twinapex.com
+
+"""
+
+__author__ = "Mikko Ohtamaa <mikko.ohtamaa@twinapex.fi>"
+__copyright__ = "2009 Twinapex Research"
+__license__ = "GPL"
+__docformat__ = "epytext"
+
 import datetime
 from django.db import models
 from django.contrib import admin
 
+# TODO: Clean up logging references
 import logging
 logger = logging.getLogger("ApexVertex")
 

@@ -20,10 +20,3 @@ INSTALLED_APPS = (
     'mobile.sniffer.apexvertex',
 )
 
-import logging
-import sys
-logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
-LOGGER = logging.getLogger("test_sniffer")
-
-
-
