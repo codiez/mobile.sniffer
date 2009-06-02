@@ -123,7 +123,7 @@ class DAInstaller:
         
         assert self.browser.headers["Content-Type"] == "application/zip" # Check that we fetch the correct file
                 
-        assert len(self.browser.contents) > 0, "Could not download da.zip API distribution")
+        assert len(self.browser.contents) > 0, "Could not download da.zip API distribution"
         
         o = open(os.path.join(self.path, self.fname), "wb")
         o.write(self.browser.contents)
