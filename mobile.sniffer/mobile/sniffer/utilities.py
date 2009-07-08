@@ -77,7 +77,7 @@ def is_low_end_phone(request):
     
     user_agent = user_agent.lower()
     
-    if "firefox" in user_agent:
+    if "gecko" in user_agent:
         # Show high end version for desktop browser users
         return False
     
