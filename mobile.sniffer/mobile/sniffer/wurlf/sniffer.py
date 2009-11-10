@@ -16,7 +16,9 @@ import os, sys
 
 from mobile.sniffer import base
 
-from pywurfl.algorithms import JaroWinkler
+# Levenshtein egg is missing from pypy... can't use this
+#from pywurfl.algorithms import JaroWinkler
+from pywurfl.algorithms import Tokenizer
 
 class WurlfSniffer(base.Sniffer):
     """
@@ -39,7 +41,8 @@ class WurlfSniffer(base.Sniffer):
             raise NotImplementedError("TODO")
 
         # Set search algorithm
-        self.search = JaroWinkler(accuracy=0.85)
+        #self.search = JaroWinkler(accuracy=0.85)
+        self.search = Tokenizer()
 
     def sniff(self, request):
         """ Look up handset from DeviceAtlas database using HTTP_USER_AGENT as a key """
