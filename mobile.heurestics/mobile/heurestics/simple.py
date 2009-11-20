@@ -90,20 +90,21 @@ def is_iphone(request):
 
     return "iPhone" in user_agent
 
-def format_phone_number_href(request, human_readble_number, **classes):
+def format_phone_number_href(request, human_readable_number):
     """
 
     http://www.searchenginepeople.com/blog/iphone-search-result-optimization-tip-1-phone-numbers-in-meta-tags.html
 
     @param request: HTTP request object (WSGI/Zope/Django)
-    """
 
-    internationl = "+" in human_readble_number
+    @param human_readble_number: Phone number in human readable format - may contain spaces and such
+    """
 
     allowed = "+*0123456789"
 
     # Make phone number digits only
     plain_number = [ digit for digit in human_readable_number if digit in allowed ]
+    plain_number = "".join(plain_number) # convert list back to string
 
     if is_iphone(request):
         href = "tel:" + plain_number
