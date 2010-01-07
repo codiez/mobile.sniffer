@@ -7,18 +7,19 @@
 """
 
 __author__ = "Mikko Ohtamaa <mikko.ohtamaa@twinapex.fi>"
-__copyright__ = "2009 Twinapex Research"
-__license__ = "GPL"
+__copyright__ = "2010 Twinapex Research"
+__license__ = "BSD"
 __docformat__ = "epytext"
 
-
+import copy
 import os, sys
 
-from mobile.sniffer import base
+import Levenshtein
 
-# Levenshtein egg is missing from pypy... can't use this
-#from pywurfl.algorithms import JaroWinkler
-from pywurfl.algorithms import Tokenizer
+from pywurfl.algorithms import Tokenizer, JaroWinkler, Algorithm
+from pywurfl import DeviceNotFound
+
+from mobile.sniffer import base
 
 class WurlfSniffer(base.Sniffer):
     """
@@ -26,7 +27,7 @@ class WurlfSniffer(base.Sniffer):
     Native Wurlf capabilities are listed here: http://wurfl.sourceforge.net/help_doc.php
     """
 
-    def __init__(self, database_file=None):
+    def __init__(self, database_file=None, accuracy_threshold=0.5):
         """
 
         @param database_file: Path to Wurlf XML file or None to use internal database
@@ -41,8 +42,12 @@ class WurlfSniffer(base.Sniffer):
             raise NotImplementedError("TODO")
 
         # Set search algorithm
-        #self.search = JaroWinkler(accuracy=0.85)
-        self.search = Tokenizer()
+        #self.search = JaroWinkler()
+        #self.search = CustomJaroWinkler(accuracy=accuracy)
+        self.accuracy_threshold = accuracy_threshold
+        self.search = CustomJaroWinkler(self.accuracy_threshold)
+
+
 
     def sniff(self, request):
         """ Look up handset from DeviceAtlas database using HTTP_USER_AGENT as a key """
@@ -51,18 +56,43 @@ class WurlfSniffer(base.Sniffer):
         if not agent:
             return None
 
-        device = self.devices.select_ua(agent, search=self.search)
-
+        device = self.devices.select_ua(agent, search=self.search, filter_noise=True)
+    
+        # Fallback algo for convergence sites
+        
+        if device is None:
+            return None
+        
+        if not hasattr(device, "accuracy"):
+            # Direct match - no search algo involved
+            device.accuracy = 1.1
+        
+        if device.accuracy < self.accuracy_threshold:
+            return None
+    
+        if device.is_wireless_device:
+            return None
+        
         return UserAgent(device)
-
+        
 class UserAgent(base.UserAgent):
-    """ Wurfl record wrapper.
+    """ Wurfl record wrapper, abstracted in mobile.sniffer way.
     """
 
     def __init__(self, device_object):
 
         # internal DA properties object
         self.device_object = device_object
+                
+        self.certainty = accuracy 
+        
+    def getCertainty(self):
+        return self.certainty
+    
+    def getMatchedUserAgent(self):
+        """
+        """
+        return self.device_object.devua
 
     def get(self, name):
         """ Get property in DeviceAtlas compatible way.
@@ -88,3 +118,92 @@ class UserAgent(base.UserAgent):
             return self.device_object.max_image_height
         else:
             return None
+
+class CustomJaroWinkler(JaroWinkler):
+    """
+    JaroWinkley algo implementation which exposes the hit accuracy.
+    
+    XXX: HACK: We create clone of the device and stick the match accuracy there,
+    as pywurlf architecture does not allow exposing it easily.
+    """
+
+
+    def __call__(self, ua, devices):
+        """
+        @param ua: The user agent
+        @type ua: string
+        @param devices: The devices object to search
+        @type devices: Devices
+        @rtype: Device
+        @raises pywurfl.DeviceNotFound
+        """
+        match = max((Levenshtein.jaro_winkler(x, ua, self.weight), x) for
+                    x in devices.devuas)
+        if match[0] >= self.accuracy:
+            
+            dev_clone = copy.copy(devices.devuas[match[1]])
+            dev_clone.accuracy = match[0]
+            print "Got accuracy " + match[1] + " " + str(match[0])
+            return dev_clone
+        else:
+            raise DeviceNotFound(ua)
+        
+class CustomTokenizer(Tokenizer):
+    """
+    """
+    
+    def __call__(self, ua, devices):
+        dev = Tokenizer.__call__(self, ua, devices)
+        dev_clone = copy.copy(dev)
+        dev.accuracy = calc_accuracy(ua, dev.devau)
+        return dev
+            
+        
+class CustomLevenshteinDistance(Algorithm):
+    """
+    Custom Levenshtein algo implementation which tries to guess how bad our match was.
+    """
+
+    def __call__(self, ua, devices):
+        """
+        @param ua: The user agent
+        @type ua: string
+        @param devices: The devices object to search
+        @type devices: Devices
+        @rtype: Device
+        """
+
+        match = min((Levenshtein.distance(ua, x), x) for x in
+                    devices.devuas)
+        dev = devices.devuas[match[1]]
+        dev_clone = copy.copy(dev) 
+        
+        # Calculate accuraty following
+        # 20 letter or more diffence = 0
+        # 1 letter difference 0.9
+        # 0 letter difference 1.0
+        
+        missed_chars = match[0]
+        missed_chars = max(missed_chars, 20)
+        
+        dev_clone.accuracy = 1.0 - float(missed_chars) / 20.0
+        
+        return dev_clone
+    
+class DummyWebUserAgent(base.UserAgent):
+    """
+    This user agent is returned when we are unsure and want to default to a web browser.
+    """
+    
+    def get(self, name):
+        """ Get property in DeviceAtlas compatible way.
+
+        @param name: Property name, like usableDisplayWidth
+        @return: Property value, string converted to a real object
+
+        """
+
+        if name == "is_wireless_device":
+            return False
+        else:
+            None

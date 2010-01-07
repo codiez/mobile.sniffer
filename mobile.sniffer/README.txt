@@ -27,10 +27,10 @@ Features
 Sniffing backends
 -----------------
 
-||ÊBackend ||ÊDependencies ||ÊFeatures ||
+||ï¿½Backend ||ï¿½Dependencies ||ï¿½Features ||
 ||Apex Vertex || Django || 1000+ handsets, Northern European weighted, good streaming data. Fuzzy user agent matching to deal with software revision specific user agents. Can be bought from Twinapex.||
-||ÊDeviceAtlas ||Êzope.testbrowser (optional) ||Ê4000+ handsets. mobile.sniffer provides automatic download and deploment for proprietary DeviceAtlas Python APIs and data files. You need only a valid DeviceAtlas account. Can be bought from mobiForge. ||
-||ÊWAP profiles ||ÊDjango, rdflib ||ÊAuthoritative source. Many handset manufacturers publish WAP profiles in HTTP headers. They are XML files describing the device properties. If the profile header is present, the profile is downloaded, cached and parsed. Free. ||
+||ï¿½DeviceAtlas ||ï¿½zope.testbrowser (optional) ||ï¿½4000+ handsets. mobile.sniffer provides automatic download and deploment for proprietary DeviceAtlas Python APIs and data files. You need only a valid DeviceAtlas account. Can be bought from mobiForge. ||
+||ï¿½WAP profiles ||ï¿½Django, rdflib ||ï¿½Authoritative source. Many handset manufacturers publish WAP profiles in HTTP headers. They are XML files describing the device properties. If the profile header is present, the profile is downloaded, cached and parsed. Free. ||
 
 Installation
 ------------
@@ -62,35 +62,86 @@ Usage examples
 Simple example
 ======================
 
+This example will work out of the box with the included pywurlf database.
+
 Example::
 
-	from mobile.sniffer.apexvertex.installer import install_apex_vertex
-	from mobile.sniffer.apexvertex.sniffer import ApexVertexSniffer
+        try:
+            from mobile.sniffer.wurlf.sniffer import WurlfSniffer
+        
+            # Wrapper sniffer instance
+            # All start-up delay goes on this line
+            sniffer = WurlfSniffer()
+        except ImportError, e:
+            import traceback
+            traceback.print_exc()
+            logger.exception(e)
+            logger.error("Could not import Wurlf sniffer... add pywurfl and python-Lehvenstein to buildout.cfg eggs section")
+            sniffer = None
 
-	# For this project, we source our mobile handset data from
-	# Apex Vertex database
-	sniffer = ApexVertexSniffer()
+	def sniff_request(request):
+	    """
+	    @param request: Request can be Django, WSGI or Zope HTTPRequest object
+            """
+            
+            if not sniffer:
+                # We failed to initialize Wurfl
+                return None
 
-	def init():
-	    # Populate SQL database with provded handset information -
-	    # you only need to do this when handset data is updated
-	    install_apex_vertex("mydata.json")
-
-	def render_page(request):
-	    # Request can be Django, WSGI or Zope HTTPRequest object
 	    user_agent = sniffer.sniff(request)
 
 	    if user_agent == None:
 	        # No match in the handset database,
-	        return render_unknown_mobile_phone_page()
-
-	    width = user_agent.get("usableDisplayWidth")
-	    height = user_agent.get("usableDisplayHeight")
-	    has_video_link = user_agent.get("stream.3gp.h263") # Does the handset support our 3GP video clip
-
-	    return render_mobile_page(width, height, has_video_link)
+	        return None
+            else:
+                return user_agent # mobile.sniffer.wurlf.sniffer.UserAgent object
 
 
+        def web_or_mobile(request)
+                ua = sniff_request(request)
+                
+                # How certain we must be about UA 
+                # match to make decisions
+                # float 0...1, the actual value is UA search algorithm specific
+                # We use JaroWinkler as the default algorithm
+                certainty_threshold = 0.7
+                
+                if ua.get("is_wireless_device") and ua.getCertainty() > certainty_threshold:
+                        # Mobile code
+                        pass
+                else:
+                        # Webby code
+                        pass
+                        
+Match-making process for Wurfl
+==============================
+
+Since Wurfl is the default backend the process of finding UA record is explained more carefully
+
+* Wurlf database is usually loaded during the start-up (slow operation) - it is possible
+  to make this to use lazy initialization pattern
+
+* The search algorithm is initialized with certain match threshold - all matches below this threshold
+  will be ignored. The default search algorithm is JaroWinkler from Lehvenstein Python package.
+
+* When the user agent is searched
+
+        * Take in HTTP request User-Agent header
+        
+        * Go through all entries in database
+        
+        * Match this entry against incoming User-Agent using the search algorithm
+        
+                * First search pass is doing using exact string matches (no algorithm involved). In this 
+                  case exposed certainty will be 1.1.
+                
+                * If there was no match in the first pass, do the second pass using the search algorithm
+        
+        * If match is found and threshold is exceed return this user agent record 
+        
+                * User agent record is retrofitted with the information how accurate the match was
+                  (ua.getCertainty() method exposes this)
+                  
 Chained example
 ====================
 
@@ -116,7 +167,21 @@ Example::
     property = ua.get("usableDisplayWidth") # This will look up data from all the databases in the chain
 
 
-Developer for you by [http://www.twinapex.com Twinapex]Êand open source community.
+Author
+------
+
+`Twinapex Team <mailto:info@twinapex.com>`_ - Python and Plone professionals for hire.
+
+* `Twinapex company site <http://www.twinapex.com>`_ (`Twinapex-yritysryhmï¿½ <http://www.twinapex.fi>`_)
+
+* `Twinapex company blog <http://blog.twinapex.fi>`_
+
+* `Twinapex mobile site <http://www.twinapex.mobi>`_
+
+* `More about Plone <http://www.twinapex.com/products/plone>`_ (`Lisï¿½tietoa Plone-julkaisujï¿½rjestelmï¿½stï¿½ <http://www.twinapex.fi/tuotteet/plone>`_)
+
+* `Other open source Plone products by Twinapex <http://www.twinapex.com/for-developers/open-source/for-plone>`_
+
 
 
 

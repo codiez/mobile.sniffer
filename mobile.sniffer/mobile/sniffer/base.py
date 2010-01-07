@@ -72,6 +72,19 @@ class UserAgent(object):
     DeviceAtlas property naming convention was choosen as a base, since it is very well established.
     """
     
+    def getCertainty(self):
+        """ How confident we are about this user agent match.
+        
+        @return: 0...1 how certain the user agent match was. None if the information is not available.
+        """
+        return None
+    
+    def getMatchedUserAgent(self):
+        """    
+        @return: Which database UA entry corresponds the looked upUA
+        """
+        return None
+    
     def get(self, name):
         """
         
