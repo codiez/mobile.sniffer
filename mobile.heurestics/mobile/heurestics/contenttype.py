@@ -1,9 +1,10 @@
 """
 
-    XXXX - this code is not finished - DO NOT USE
-
-    Mobile content type helpers.
-
+    Mobile content type helpers. Get HTTP content type and doctype according 
+    to what the handset asks for.
+    
+    
+    TODO: Only supports XHTML basic for now.
 
     http://www.developershome.com/wap/xhtmlmp/xhtml_mp_tutorial.asp?page=mimeTypesFileExtension
 
