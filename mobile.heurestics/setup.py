@@ -24,6 +24,7 @@ setup(name='mobile.heurestics',
       install_requires=[
           'setuptools',
           # -*- Extra requirements: -*-
+          'vobject' # For manipulating vCards
       ],
       entry_points="""
       # -*- Entry points: -*-
