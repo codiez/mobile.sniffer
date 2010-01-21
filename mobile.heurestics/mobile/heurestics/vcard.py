@@ -5,6 +5,12 @@
     vObject dependency needed: http://vobject.skyhouseconsulting.com/
 """
 
+__author__ = "Mikko Ohtamaa <mikko.ohtamaa@twinapex.com>"
+__copyright__ = "2010 Twinapex Research"
+__license__ = "GPL"
+__docformat__ = "epytext"
+
+
 from StringIO import StringIO
 
 from mobile.sniffer.utilities import get_user_agent
@@ -12,6 +18,8 @@ from mobile.sniffer.utilities import get_user_agent
 import vobject
 from vobject import vcard
 from vobject import base
+
+
 
 class TelBehavior(vcard.VCardBehavior):
     """ A quick hack to implement Tel behavior (missing from vobject lib) """

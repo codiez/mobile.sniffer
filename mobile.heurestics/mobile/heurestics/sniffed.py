@@ -4,8 +4,8 @@
 
 """
 
-__author__ = "Mikko Ohtamaa <mikko.ohtamaa@twinapex.fi>"
-__copyright__ = "2009 Twinapex Research"
+__author__ = "Mikko Ohtamaa <mikko.ohtamaa@twinapex.com>"
+__copyright__ = "2010 Twinapex Research"
 __license__ = "GPL"
 __docformat__ = "epytext"
 

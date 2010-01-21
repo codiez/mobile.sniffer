@@ -10,10 +10,10 @@
 
 """
 
-__license__ = "GPL 2"
-__copyright__ = "2009 Twinapex Research"
 __author__ = "Mikko Ohtamaa <mikko.ohtamaa@twinapex.com>"
-__author_url__ = "http://www.twinapex.com"
+__copyright__ = "2010 Twinapex Research"
+__license__ = "GPL v2"
+__docformat__ = "epytext"
 
 MOBILE_CONTENT_TYPES = [
     "application/vnd.wap.xhtml+xml", 
