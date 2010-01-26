@@ -7,6 +7,8 @@
     TODO: Only supports XHTML basic for now.
 
     http://www.developershome.com/wap/xhtmlmp/xhtml_mp_tutorial.asp?page=mimeTypesFileExtension
+    
+    http://en.wikipedia.org/wiki/XHTML_Mobile_Profile
 
 """
 
@@ -14,6 +16,8 @@ __author__ = "Mikko Ohtamaa <mikko.ohtamaa@twinapex.com>"
 __copyright__ = "2010 Twinapex Research"
 __license__ = "GPL v2"
 __docformat__ = "epytext"
+
+from mobile.sniffer.utilities import get_user_agent
 
 MOBILE_CONTENT_TYPES = [
     "application/vnd.wap.xhtml+xml", 
@@ -49,7 +53,17 @@ def get_content_type_and_doctype(request):
     
     http://www.google.com/support/webmasters/bin/answer.py?hl=fi&answer=40348
     
+    For Google, give XHTML MP, for other, give real HTML.
+    
     @param accepted: HTTP Accepted header 
     """
-    return "Content-Type: application/xhtml+xml;charset=UTF-8", '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.0//FI" "http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd">'
+    
+    # hack hack hack
+    ua = get_user_agent(request)
+    if ua:
+        ua = ua.lower()
+        if "googlebot-mobile" in ua:
+            return "Content-Type: application/xhtml+xml;charset=UTF-8", '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.2//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">'
+        
+    return "Content-Type: text/html;charset=UTF-8", '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
     
