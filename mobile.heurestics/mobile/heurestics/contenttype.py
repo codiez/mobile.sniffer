@@ -51,5 +51,5 @@ def get_content_type_and_doctype(request):
     
     @param accepted: HTTP Accepted header 
     """
-    return "Content-Type: application/xhtml+xml;charset=UTF-8", '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.0//FI" "http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd">'
+    return "Content-Type: application/xhtml+xml;charset=UTF-8", '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.0//FI" "http://www.w3.org/TR/xhtml-basic/xhtml-basic10.dtd">'
     
