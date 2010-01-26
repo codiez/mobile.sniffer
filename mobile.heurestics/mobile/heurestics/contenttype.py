@@ -47,7 +47,18 @@ def get_html_docstring(request):
 
     @return: Which docstring should be used
     """
-    
+
+def is_xhtml(request):
+    """
+    """
+    ua = get_user_agent(request)
+    if ua:
+        ua = ua.lower()
+        if "googlebot-mobile" in ua:
+            return True
+        
+    return False
+
 def get_content_type_and_doctype(request):
     """ TODO: hardcoded for now
     
@@ -59,11 +70,21 @@ def get_content_type_and_doctype(request):
     """
     
     # hack hack hack
-    ua = get_user_agent(request)
-    if ua:
-        ua = ua.lower()
-        if "googlebot-mobile" in ua:
-            return "Content-Type: application/xhtml+xml;charset=UTF-8", '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.2//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">'
+    if is_xhtml(request):
+        return "Content-Type: application/xhtml+xml;charset=UTF-8", '<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.2//EN" "http://www.openmobilealliance.org/tech/DTD/xhtml-mobile12.dtd">'
         
     return "Content-Type: text/html;charset=UTF-8", '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
+    
+    
+def get_html_tag(request, lang):
+    """ Render a proper HTML tag.
+    """
+    ct, dt = get_content_type_and_doctype(request)
+    
+    if "xml" in ct:
+        return "<html>"
+    
+
+def get_start(request, lang):
+    return get_content_type_and_doctype(request) + get_html_tag(request, lang)
     
