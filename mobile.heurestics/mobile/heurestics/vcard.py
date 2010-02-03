@@ -30,7 +30,8 @@ base.registerBehavior(TelBehavior, 'TEL')
 
 
 def create_vcard(first_name=None, 
-                 last_name=None, 
+                 last_name=None,
+                 title=None, 
                  company=None, 
                  email=None, 
                  street=None, 
@@ -39,6 +40,7 @@ def create_vcard(first_name=None,
                  city=None, 
                  postal_code=None, 
                  phone_number=None,
+                 office_number=None,
                  latitude=None,
                  longitude=None):
     """
@@ -68,7 +70,9 @@ def create_vcard(first_name=None,
     else:
         # vCard limitation - must be at least one fn element
         raise RuntimeError("First name and last name must be given")
-    
+    if title:
+        j.add('title')
+        j.title.value = title
     if email:
         j.add('email')
         j.email.value = email
@@ -98,7 +102,10 @@ def create_vcard(first_name=None,
         j.add("tel")
         j.tel.value = phone_number
         j.tel.type_param = ["WORK","MOBILE"] 
-        
+    #if office_number:
+    #    j.add('TEL')
+    #    j.TEL.value = office_number
+    #    j.TEL.value = ["WORK", "OFFICE"]    
     if latitude and longitude:
         # Not supported yet
         pass

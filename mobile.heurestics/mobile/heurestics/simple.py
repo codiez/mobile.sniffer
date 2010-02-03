@@ -61,7 +61,7 @@ def is_low_end_phone(request):
     if "opera" in user_agent:
         # Opera mini does its job well
         return False
-
+    
     return not "webkit" in user_agent
 
 def is_high_end_phone(request):
