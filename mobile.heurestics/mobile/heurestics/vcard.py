@@ -15,11 +15,11 @@ from StringIO import StringIO
 
 from mobile.sniffer.utilities import get_user_agent
 
+from mobile.heurestics.simple import is_apple_device, is_blackberry  
+
 import vobject
 from vobject import vcard
 from vobject import base
-
-
 
 class TelBehavior(vcard.VCardBehavior):
     """ A quick hack to implement Tel behavior (missing from vobject lib) """
@@ -112,4 +112,13 @@ def create_vcard(first_name=None,
             
     return j.serialize()
 
+    
+def is_vcard_supported(request):
+    """
+    @return: True if the device which made HTTP request can support HTTP downlodable vCards
+    """
+    if is_apple_device(request) or is_blackberry(request):
+        return False
+    
+    return True
     
