@@ -2,7 +2,8 @@
 
     vCard download generation
 
-    vObject dependency needed: http://vobject.skyhouseconsulting.com/
+    vObject Python package needed: http://vobject.skyhouseconsulting.com/'
+    
 """
 
 __author__ = "Mikko Ohtamaa <mikko.ohtamaa@twinapex.com>"
