@@ -105,7 +105,7 @@ def create_vcard(first_name=None,
         
     if company:
         j.add("org")
-        j.org.value = ["xxx"]
+        j.org.value = [company]
         
     
     if landline_number:
