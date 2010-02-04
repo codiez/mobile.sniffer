@@ -39,10 +39,12 @@ def create_vcard(first_name=None,
                  country=None, 
                  city=None, 
                  postal_code=None, 
-                 phone_number=None,
-                 office_number=None,
+                 landline_number=None,
+                 mobile_number=None,
                  latitude=None,
-                 longitude=None):
+                 longitude=None,
+                 www_link=None,
+                 www_link_2=None):
     """
     
     Todo: handle encoding internally - currently pre-encoded strings assumed
@@ -98,14 +100,24 @@ def create_vcard(first_name=None,
         j.org.value = ["xxx"]
         
     
-    if phone_number:
-        j.add("tel")
-        j.tel.value = phone_number
-        j.tel.type_param = ["WORK","MOBILE"] 
-    #if office_number:
-    #    j.add('TEL')
-    #    j.TEL.value = office_number
-    #    j.TEL.value = ["WORK", "OFFICE"]    
+    if landline_number:
+        tel = j.add("tel")        
+        tel.type_param = ["WORK","VOICE"]
+        tel.value = landline_number
+
+    if mobile_number:
+        tel = j.add("tel")        
+        tel.type_param = ["WORK","MOBILE"]
+        tel.value = mobile_number
+                
+    if www_link:
+        url = j.add("url")
+        url.value = www_link
+
+    if www_link_2:
+        url = j.add("url")
+        url.value = www_link_2
+          
     if latitude and longitude:
         # Not supported yet
         pass
