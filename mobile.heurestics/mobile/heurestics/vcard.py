@@ -45,21 +45,28 @@ def create_vcard(first_name=None,
                  longitude=None,
                  www_link=None,
                  www_link_2=None):
-    """
+    """ Create a vCard payload.
     
-    Todo: handle encoding internally - currently pre-encoded strings assumed
+    Create payload for vCard transfered via SMS, email or HTTP download.
     
-    Create a vCard payload.
+    TODO: handle encoding internally - currently pre-encoded strings assumed
+    
+    TODO: Support geolocation extensions
+ 
+    vCard specification: 
+        
+        * http://www.ietf.org/rfc/rfc2426.txt
+        
+    More info:
+    
+        * http://vobject.skyhouseconsulting.com/usage.html
+        
+        * http://svn.osafoundation.org/vobject/trunk/vobject/vcard.py
+        
+        * http://en.wikipedia.org/wiki/VCard
 
-    http://vobject.skyhouseconsulting.com/usage.html
-    
-    http://svn.osafoundation.org/vobject/trunk/vobject/vcard.py
-    
-    http://www.ietf.org/rfc/rfc2426.txt
-    
-    http://en.wikipedia.org/wiki/VCard
-    
-    TEL;TYPE=WORK,VOICE:(111) 555-1212
+        
+    @return: 8-bit string, using input encoding. 
     """
     
     j = vobject.vCard()
