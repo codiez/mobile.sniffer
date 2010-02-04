@@ -91,6 +91,19 @@ def is_iphone(request):
 
     return "iPhone" in user_agent
 
+def is_blackberry(request):
+    """
+    @param request: HTTP request object (WSGI/Zope/Django)
+    """
+
+    user_agent = get_user_agent(request)
+    return "blackberry" in user_agent.lower()
+
+def is_vcard_supported(request):
+    if is_iphone(request) or is_blackberry(request):
+        return False
+    return True
+
 def format_phone_number_href(request, human_readable_number):
     """
 
