@@ -116,6 +116,16 @@ def is_blackberry(request):
     user_agent = get_user_agent(request)
     return "blackberry" in user_agent.lower()
 
+def is_android(request):
+    """ Is the device which makde HTTP request Blackberry like
+     
+    @param request: HTTP request object (WSGI/Zope/Django)
+    """
+
+    user_agent = get_user_agent(request)
+    return "android" in user_agent.lower()
+
+
 def format_phone_number_href(request, human_readable_number):
     """
 

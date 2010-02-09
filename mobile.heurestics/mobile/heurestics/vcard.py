@@ -16,7 +16,7 @@ from StringIO import StringIO
 
 from mobile.sniffer.utilities import get_user_agent
 
-from mobile.heurestics.simple import is_apple_device, is_blackberry  
+from mobile.heurestics.simple import is_apple_device, is_blackberry, is_android  
 
 import vobject
 from vobject import vcard
@@ -135,9 +135,9 @@ def create_vcard(first_name=None,
     
 def is_vcard_supported(request):
     """
-    @return: True if the device which made HTTP request can support HTTP downlodable vCards
+    @return: True if the device which made HTTP request can support HTTP downloadable vCards
     """
-    if is_apple_device(request) or is_blackberry(request):
+    if is_apple_device(request) or is_blackberry(request) or is_android(request):
         return False
     
     return True
