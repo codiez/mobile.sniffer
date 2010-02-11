@@ -84,7 +84,7 @@ class UserAgent(base.UserAgent):
         # internal DA properties object
         self.device_object = device_object
                 
-        self.certainty = accuracy 
+        self.certainty = device_object.accuracy 
         
     def getCertainty(self):
         return self.certainty
