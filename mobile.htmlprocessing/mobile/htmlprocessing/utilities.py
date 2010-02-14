@@ -12,7 +12,7 @@ __author__ = "Mikko Ohtamaa <mikko.ohtamaa@mfabrik.com>"
 __docformat__ = "epytext"
 
 
-def add_style(style_string, new_style):
+def set_style(style_string, new_style):
     """ Appends a new style to HTML style string.
     
     @param new_style: Style to append e.g. "float: none"
@@ -20,8 +20,28 @@ def add_style(style_string, new_style):
     @param style_string: The existing style attribute content or None if does not exist
     """
     
+    
     if style_string:
-        new = style_string + ";"
+    
+        new_style_css_directive = new_style.split(":")[0] 
+    
+        def filter(x):
+            """ Filter out the existing CSS directive for the style
+            """
+            x = x.strip()
+            #print "Matching " + x + " " + new_style_css_directive
+            if x.startswith(new_style_css_directive):
+                return False
+            return True
+                
+        parts = style_string.split(";")
+        style_string = ";".join([ part for part in parts if filter(part) == True ])
+    
+        # Do we have any more elements left?
+        if len(style_string) > 0:
+            new = style_string + ";"
+        else:
+            new = ""
     else:
         new = ""
         

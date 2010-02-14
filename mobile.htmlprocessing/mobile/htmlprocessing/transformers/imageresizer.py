@@ -14,7 +14,7 @@ __copyright__ = "2001 mFabrik Research"
 __author__ = "Mikko Ohtamaa <mikko.ohtamaa@mfabrik.com>"
 __docformat__ = "epytext"
 
-from mobile.htmlprocessing.utilities import add_style, add_class
+from mobile.htmlprocessing.utilities import set_style, add_class
 
 from basic import BasicCleaner
 
@@ -25,13 +25,17 @@ class ImageResizer(BasicCleaner):
     2. De-float images
 
     3. And missing alt="" tags if any
+
+    Note that in non-trusted mode all style attributes get cleared.
     """
     
-    def __init__(self, base_url):
+    def __init__(self, base_url, trusted=False):
         """ 
         @param base_url: For resolving relative image URLs  
         """
-        self.base_url
+        BasicCleaner.__init__(self, trusted=trusted)
+        self.base_url = base_url
+        
         
     def rewrite(self, url):
         """ Rewrite <img> source URL.
@@ -56,8 +60,8 @@ class ImageResizer(BasicCleaner):
         """ 
         """
         style = el.attrib.get("style", None)
-        style = add_style(style, "float: none")
-        el.attrib.set("style", style)
+        style = set_style(style, "float: none")
+        el.attrib["style"] = style
     
     def get_processed_class(self, el):
         """
@@ -66,23 +70,24 @@ class ImageResizer(BasicCleaner):
         return "mobile-resized"
     
     def add_processed_class(self, el):
-        """
+        """ Mark <img> specially resized.
         """
         klass = el.attrib.get("class", None)
         klass = add_class(klass, self.get_processed_class(el))
-        el.attrib.set("class", klass)
+        el.attrib["class"] = klass
     
     def process_img(self, doc, el):
-        """
+        """ Process <img> tag in the source docu,ent.
         
         """
         self.add_alt_tags(el)
         
         src = el.attrib.get("src", None)
         if src:
-            el.attrib[src] = self.rewriter(src)
+            el.attrib["src"] = self.rewrite(src)
             
         if self.needs_clearing(el):
             self.clear_floats(el)
 
+        
         self.add_processed_class(el)

@@ -21,7 +21,7 @@ Features
 
 * Rewrite <img> tags so that images are resized for mobile viewing
 
-* Make arbitary HTML/XHTML to more compatible with mobile phones
+* Make arbitary input HTML to valid XHTML to more compatible with mobile phones
 
 * Enforce empty ALT text on images missing ALT attribute
 
@@ -30,28 +30,14 @@ Features
 
 * Unicode compliant - eats funky characters
 
+* Both trusted HTML and non-trusted HTML (may contain <script> and <iframe> etc.) 
+  modes
+
 
 Usage
 -----
 
-clean_xhtml_mp(html)
-====================
-
-This function will do everyhing you need.
-
-Run XHTML mobile profile cleaner for HTML code::
-
-	@param html: HTML as a string or lxml Document
-	@return: XHTML, utf-8 encoded string
-
-Example::
-
-	from gomobile.xhtmlmp.transformers.xhtmlmp_safe import clean_xhtml_mp
-
-	html = '<img src="http://www.foobar.com">'
-	output = clean_xhtml_mp(html)
-	self.assertEqual(output, '<img src="http://www.foobar.com" alt=""/>', "Got:" + output)
-
+Please see example code in unit tests.
 
 Unit tests
 ----------

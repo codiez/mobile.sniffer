@@ -7,14 +7,18 @@ __author_url__ = "http://www.twinapex.com"
 
 import unittest
 
-from mobile.htmlprocessing.transformers.alttagger import fix_images
+from mobile.htmlprocessing.transformers.basic import fix_html
 
 class UnicodeTestCase(unittest.TestCase):
     
     def test_unicode(self):
         html = u'<div>ÅÄÖ</div>'
-        output = fix_images(html)        
+        output = fix_html(html)        
         self.assertEqual(output, u'<div>ÅÄÖ</div>', "Got:" + output)
+
+
+def test_suite():    
+    return unittest.makeSuite(UnicodeTestCase)
         
 if __name__ == '__main__':
     unittest.main()

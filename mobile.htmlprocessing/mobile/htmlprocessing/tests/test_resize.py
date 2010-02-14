@@ -12,7 +12,7 @@ from mobile.htmlprocessing.transformers.imageresizer import ImageResizer
 
 DUMMY_RESIZE_VIEW="http://localhost/@@resizer?url="
 
-class TestResizer(ImageResizer):
+class MockResizer(ImageResizer):
     """
     """
     
@@ -21,13 +21,13 @@ class TestResizer(ImageResizer):
         """
         return DUMMY_RESIZE_VIEW + urllib.quote_plus(url)
 
-class ImageTestCase(unittest.TestCase):
+class ResizerTestCase(unittest.TestCase):
     """ Test <img> tag handling
         
     """    
     
     def transform(self, html):
-        resizer = TestResizer(base_url=None)
+        resizer = MockResizer(base_url=None, trusted=True)
         return resizer.process(html)
     
     def test_simple(self):
@@ -35,7 +35,7 @@ class ImageTestCase(unittest.TestCase):
         
         html = '<img src="http://www.foobar.com">'
         output = self.transform(html)        
-        self.assertEqual(output, '<img src="http://www.foobar.com" alt=""/>', "Got:" + output)
+        self.assertEqual(output, '<img src="http://localhost/@@resizer?url=http%3A%2F%2Fwww.foobar.com" alt="" style="float: none" class="mobile-resized"/>', "Got:" + output)
                 
     def test_alt(self):
         """ Check that existing ALT attribute stays untouched """
@@ -46,12 +46,35 @@ class ImageTestCase(unittest.TestCase):
     def test_got_css_class(self):
         html = '<img src="http://www.foobar.com" ALT="bar">'
         output = self.transform(html)        
-        self.assertTrue('class="mobile-resizer"' in output, "Got:" + output)
+        self.assertTrue('class="mobile-resized"' in output, "Got:" + output)
 
     def test_got_no_float(self):
         html = '<img src="http://www.foobar.com" ALT="bar">'
         output = self.transform(html)        
         self.assertTrue('style="float: none"' in output, "Got:" + output)
+
+    def test_process_existing_float(self):
+        html = '<img src="http://www.foobar.com" ALT="bar" style="float: left">'
+        output = self.transform(html)        
+        self.assertFalse('left' in output, "Got:" + output)
+        self.assertTrue('float: none' in output, "Got:" + output)
+        
+    def test_process_existing_float_multi_style(self):
+        html = '<img src="http://www.foobar.com" style="float: left; border: 1px solid black" ALT="asdasdbar" />'
+        output = self.transform(html)        
+        self.assertTrue('solid black' in output, "Got:" + output)
+        self.assertFalse('left' in output, "Got:" + output)
+
+    def test_process_existing_float_hyper_multi_style(self):
+        html = '<img src="http://www.foobar.com" style="display: none; float: left; border: 1px solid black" ALT="asdasdbar" />'
+        output = self.transform(html)        
+        self.assertTrue('solid black' in output, "Got:" + output)
+        self.assertFalse('left' in output, "Got:" + output)
+        self.assertTrue('display: none' in output, "Got:" + output)
+        
+def test_suite():    
+    return unittest.makeSuite(ResizerTestCase)
+
                         
 if __name__ == '__main__':
     unittest.main()

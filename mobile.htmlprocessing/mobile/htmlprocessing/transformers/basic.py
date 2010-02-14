@@ -17,7 +17,8 @@ import copy
 try:
     import lxml
 except ImportError:
-    raise RuntimeError("Please install lxml: http://pypi.python.org/pypi/lxml/")
+    #raise RuntimeError("Please install lxml: http://pypi.python.org/pypi/lxml/")
+    pass
 
 from lxml.html import defs
 from lxml.html import fromstring, tostring, XHTML_NAMESPACE
@@ -28,6 +29,15 @@ from lxml.html.clean import Cleaner
 class BasicCleaner(Cleaner):
     """ Clean incoming HTML to be valid XHTML mobile profile without any nastiness """
 
+    def __init__(self, trusted=False):
+        """ Initialize HTML cleaner.
+        
+        Set whether we want to filter out nasty tags also.
+         
+        @param trusted: True if HTML is from trusted source 
+        """
+        self.trusted = trusted
+        
     def add_alt_tags(self, el):
         """ Alt tags are needed for every image.
 
@@ -46,7 +56,7 @@ class BasicCleaner(Cleaner):
     def clean_mobile(self, doc):
         """ Run XHTML-MP specific cleaners for the document.
         """
-        self.add_alt_tags(doc)
+        self.process_imgs(doc)
 
     def process(self, html):
         """ Run XHTML mobile profile cleaner for HTML code.
@@ -54,6 +64,8 @@ class BasicCleaner(Cleaner):
         @param html: HTML as a strinrg or lxml Document
         @return: XHTML, utf-8 encoded string
         """
+        
+        # Check whether we got ready parse-tree or string input
         result_type = type(html)
 
         if isinstance(html, basestring):
@@ -61,11 +73,12 @@ class BasicCleaner(Cleaner):
         else:
             doc = copy.deepcopy(html)
 
-        # Run normal cleaning
-        self(doc)
-
         # Run XHTML MP specific cleaning
         self.clean_mobile(doc)
+
+        # Run normal cleaning
+        if not self.trusted:
+            self(doc)
 
         return tostring(doc, method="xml", encoding='UTF-8')
 
