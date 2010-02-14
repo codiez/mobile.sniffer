@@ -32,6 +32,7 @@ class ImageTestCase(unittest.TestCase):
         output = fix_html(html)        
         self.assertEqual(output, '<img src="http://www.foobar.com" alt="bar"/>', "Got:" + output)
 
+
 def test_suite():    
     return unittest.makeSuite(ImageTestCase)
 
