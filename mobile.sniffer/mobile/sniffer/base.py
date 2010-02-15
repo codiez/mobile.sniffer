@@ -86,7 +86,13 @@ class UserAgent(object):
         return None
     
     def get(self, name):
-        """
+        """ Ask user agent record property.
+        
+        Available:
+        
+        * usableDisplayWidth
+        
+        * usableDisplayHeight
         
         @param name: DeviceAtlas compatible property name, see http://deviceatlas.com/properties
         
