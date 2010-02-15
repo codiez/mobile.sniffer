@@ -156,7 +156,7 @@ class CustomJaroWinkler(JaroWinkler):
             raise DeviceNotFound(ua)
         
 class CustomTokenizer(Tokenizer):
-    """
+    """ TODO: DO NOT USE - not implementd
     """
     
     def __call__(self, ua, devices):
