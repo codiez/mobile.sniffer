@@ -86,6 +86,14 @@ class ImageResizer(BasicCleaner):
         if src:
             el.attrib["src"] = self.rewrite(src)
             
+            # Remove explicit width declarations
+            if "width" in el.attrib:            
+                del el.attrib["width"]
+
+            if "height" in el.attrib:            
+                del el.attrib["height"]
+
+            
         if self.needs_clearing(el):
             self.clear_floats(el)
 
