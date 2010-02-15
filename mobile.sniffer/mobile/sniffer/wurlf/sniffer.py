@@ -51,9 +51,11 @@ class WurlfSniffer(base.Sniffer):
 
     def sniff(self, request):
         """ Look up handset from DeviceAtlas database using HTTP_USER_AGENT as a key """
+
         agent = self.get_user_agent(request)
 
         if not agent:
+            print "No HTTP_USER_AGENT"
             return None
 
         device = self.devices.select_ua(agent, search=self.search, filter_noise=True)
@@ -61,16 +63,20 @@ class WurlfSniffer(base.Sniffer):
         # Fallback algo for convergence sites
         
         if device is None:
+            print "select_ua yield no result"
             return None
         
         if not hasattr(device, "accuracy"):
             # Direct match - no search algo involved
+            # thus the match is perfect and use special number
+            # to symbolize this ( > 1 )
             device.accuracy = 1.1
         
         if device.accuracy < self.accuracy_threshold:
             return None
     
-        if device.is_wireless_device:
+        if not device.is_wireless_device:
+            # Matched a desktop browser
             return None
         
         return UserAgent(device)
@@ -139,6 +145,7 @@ class CustomJaroWinkler(JaroWinkler):
         """
         match = max((Levenshtein.jaro_winkler(x, ua, self.weight), x) for
                     x in devices.devuas)
+
         if match[0] >= self.accuracy:
             
             dev_clone = copy.copy(devices.devuas[match[1]])
