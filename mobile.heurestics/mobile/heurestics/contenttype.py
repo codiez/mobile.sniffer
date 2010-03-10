@@ -49,7 +49,9 @@ def get_html_docstring(request):
     """
 
 def is_xhtml(request):
-    """
+    """ Determine whether HTML'ish request should be served as XHTML.
+    
+    Note: This should be done for bots only. See reasons in Developer Manual, XHTML section.
     """
     ua = get_user_agent(request)
     if ua:
