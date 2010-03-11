@@ -55,8 +55,12 @@ class WurlfSniffer(base.Sniffer):
         agent = self.get_user_agent(request)
 
         if not agent:
-            print "No HTTP_USER_AGENT"
+            # print "No HTTP_USER_AGENT"
             return None
+        
+        if type(agent) == str:
+            # Unicodify
+            agent = agent.decode("utf-8")
 
         device = self.devices.select_ua(agent, search=self.search, filter_noise=True)
     
