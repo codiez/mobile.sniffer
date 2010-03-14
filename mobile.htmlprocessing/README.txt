@@ -3,7 +3,7 @@
 Introduction
 ------------
 
-mobile.htmlprocessing provides utilities to sanitize arbitary content HTML for mobile output-
+mobile.htmlprocessing provides utilities to sanitize arbitary HTML for mobile output.
 
 The code will also filter possible malicious code in external feed content, like <script> tags.
 
@@ -64,15 +64,10 @@ See also
 Author
 ------
 
-`Twinapex Team - Professional Python and Plone hackers for hire. <mailto:info@twinapex.com>`_.
+`mFabrik Research Oy <mailto:info@mfabrik.com>`_ - Python and Plone professionals for hire.
 
-* `Twinapex company site <http://www.twinapex.com>`_ (`Finnish <http://www.twinapex.fi>`_)
+* `mFabrik web site <http://mfabrik.com>`_ 
 
-* `Twinapex company blog <http://blog.twinapex.fi>`_
+* `mFabrik mobile site <http://mfabrik.mobi>`_ 
 
-* `Twinapex mobile site <http://www.twinapex.mobi>`_
-
-* `More about Plone <http://www.twinapex.com/products/plone>`_
-
-* `Other open source Plone products by Twinapex <http://www.twinapex.com/for-developers/open-source/for-plone>`_
-
+* `Blog <http://blog.mfabrik.com>`_
