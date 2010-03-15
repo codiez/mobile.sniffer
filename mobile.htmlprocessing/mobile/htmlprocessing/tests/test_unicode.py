@@ -13,7 +13,10 @@ class UnicodeTestCase(unittest.TestCase):
     
     def test_unicode(self):
         html = u'<div>ÅÄÖ</div>'
-        output = fix_html(html)        
+        output = fix_html(html) 
+        
+        output = output.decode("utf-8")
+               
         self.assertEqual(output, u'<div>ÅÄÖ</div>', "Got:" + output)
 
 
