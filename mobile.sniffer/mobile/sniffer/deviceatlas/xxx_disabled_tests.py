@@ -2,6 +2,9 @@
 
     Simple run-through test for DeviceAtlas.
 
+    TODO: Disabled for now, because valid DeviceAtlas
+    user account would be required.
+
 """
 __author__ = "Mikko Ohtamaa <mikko.ohtamaa@twinapex.fi>"
 __copyright__ = "2009 Twinapex Research"

@@ -1,5 +1,7 @@
 """
 
+    TODO: Disabled for now due to Django dependency
+
     To execute these tests::
     
         export DJANGO=~Django-1.0.2-final/
