@@ -67,7 +67,7 @@ class WurlfSniffer(base.Sniffer):
         # Fallback algo for convergence sites
         
         if device is None:
-            print "select_ua yield no result"
+            # print "select_ua yield no result"
             return None
         
         if not hasattr(device, "accuracy"):
@@ -154,7 +154,7 @@ class CustomJaroWinkler(JaroWinkler):
             
             dev_clone = copy.copy(devices.devuas[match[1]])
             dev_clone.accuracy = match[0]
-            print "Got accuracy " + match[1] + " " + str(match[0])
+            # print "Got accuracy " + match[1] + " " + str(match[0])
             return dev_clone
         else:
             raise DeviceNotFound(ua)
