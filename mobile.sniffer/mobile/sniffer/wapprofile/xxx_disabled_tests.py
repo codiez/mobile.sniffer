@@ -1,5 +1,8 @@
 """
 
+    TODO: Disabled these settings due to dependencies and conflicts with Zope test runner.
+    WAP profiles were a bad idea anyway.
+
     To execute these tests::
     
         export DJANGO=~Django-1.0.2-final/
