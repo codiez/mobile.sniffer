@@ -5,14 +5,14 @@ version = '0.1'
 
 setup(name='mobile.sniffer',
       version=version,
-      description="Generic framework for mobile user agent detection",
+      description="Generic Python framework for mobile user agent detection",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-      keywords='mobile django plone user-agent http',
-      author='Mikko Ohtamaa',
-      author_email='mikko.ohtamaa@twinapex.fi',
-      url='http://www.twinapex.com',
+      keywords='mobile django plone user-agent http sniffer',
+      author='mFabrik Research Oy',
+      author_email='research@mfabrik.com',
+      url='http://mfabrik.com',
       license='GPL',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
       namespace_packages=['mobile'],

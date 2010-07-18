@@ -1,13 +1,13 @@
 Introduction
 ------------
 
-mobile.sniffer is cross-web-framework, cross-device data provider, Python framework for sniffing mobile handset properties.
+``mobile.sniffer`` is Python framework for abstracting mobile handset databases.
 
-When rendering web pages for mobile phones one must deal with varying handset features: different screen sizes and shapes, different supported file formats, different sets of web browser features. This library is the ultimate solution to deal with this complexity.
-
-Support different sniffing patterns (HTTP user agent, WAP headers) and different databases (DeviceAtlas, Apex Vertex, WAP profiles).
-
-Django, WSGI and Zope/Plone compatible.
+When rendering web pages for mobile phones one must deal with varying handset features: 
+different screen sizes and shapes, different supported file formats, different sets of web browser features. 
+Information about mobile phones is collected to databases and there are several databases available
+(Wurfl, DeviceAtlas, etc). ``mobile.sniffer`` framework aims to provide generic interface that you
+can easily plug-in different mobile handset databases without need to change your code. 
 
 Features
 --------
@@ -18,46 +18,58 @@ Features
 
 * Very convenient Python API designed by professionals
 
-* Maintained
-
 * Open source
 
 * Unit test coverage
 
-Sniffing backends
------------------
+The library is Django, WSGI and Zope/Plone compatible.
 
-||�Backend ||�Dependencies ||�Features ||
-||Apex Vertex || Django || 1000+ handsets, Northern European weighted, good streaming data. Fuzzy user agent matching to deal with software revision specific user agents. Can be bought from Twinapex.||
-||�DeviceAtlas ||�zope.testbrowser (optional) ||�4000+ handsets. mobile.sniffer provides automatic download and deploment for proprietary DeviceAtlas Python APIs and data files. You need only a valid DeviceAtlas account. Can be bought from mobiForge. ||
-||�WAP profiles ||�Django, rdflib ||�Authoritative source. Many handset manufacturers publish WAP profiles in HTTP headers. They are XML files describing the device properties. If the profile header is present, the profile is downloaded, cached and parsed. Free. ||
+Supported sniffing backends
+----------------------------
+
+* `Wurfl <http://wurfl.sourceforge.net/>`_ 
+
+* ApexVertex. Commercially available from `mFabrik <http://mfabrik.com>`_.
+
+* DeviceAtlas. Commercially available.
+
+* WAP profiles. User agents post a link to their WAP profile data, which is an XML file
+  and maintained by the handset manufacturer. (note: as WAP is deprecating protocol these are not supported on newer smartphones)
 
 Installation
 ------------
 
-mobile.sniffer is distributed as Python egg in PyPi repository.
+``mobile.sniffer`` is distributed as Python egg in PyPi repository.
 The usual method to install Python eggs is easy_install command.
 
 Simple (Unix version)::
 
 	sudo easy_install mobile.sniffer
 
-Automatic installers
---------------------
 
-Proprietary handset databases do not publicly distribute their APIs or data. mobile.sniffer deals with the problem by automatic installation wrappers. Also, these handset database APIs are not open source compatible which makes it further difficult to use them in open source projects. Instead of manually download and set up bunch of files each time you deploy your code on a new server, just make call to one magical Python function which will take care of all of this for you.
+Dependencies
+============
 
-Architecture
-------------
+.. note::
 
-* Modular structure with generic call interface across different sniffing backends
+        Python package comes with a copy of Wurfl database which dates around the release.
+        You might want to update this.
 
-* Different sniffers can be chained for better accuracy
+You might need to install additional libraries depending on what handset database you use
 
-* Uses very well documented DeviceAtlas property names as keys for property queries
+* Wurfl: `pywurlf library <http://wurfl.sourceforge.net/python/index.php>`_ and
+  `python-Levenshtein <http://pypi.python.org/pypi/python-Levenshtein/>`_
+
+* WAP profiles: Django (for database abstraction) and rdflib
+
+* Apex Vertex: Django  (for database abstraction) 
 
 Usage examples
 --------------
+
+There is no single standard to name properties queried from the handset database.
+For legacy reasons, we use DeviceAtlas database column names (keys)
+and then map them to database-dependent keys. 
 
 Simple example
 ======================
@@ -166,21 +178,41 @@ Example::
     ua = sniffer.sniff(request) # Sniff HTTP_USER_AGENT, HTTP_PROFILE and many other fields
     property = ua.get("usableDisplayWidth") # This will look up data from all the databases in the chain
 
+Automatic database installers
+--------------------------------
+
+Proprietary handset databases do not publicly distribute their APIs or data. 
+mobile.sniffer deals with the problem by automatic installation wrappers. 
+Also, these handset database APIs are not open source compatible which makes 
+it further difficult to use them in open source projects. 
+Instead of manually download and set up bunch of files each time 
+you deploy your code on a new server, just make call to one magical Python function which 
+will take care of all of this for you.
+
+Source code
+------------
+
+Source code is available via Google Code.
+
+* http://code.google.com/p/mobilesniffer/source/browse/#svn/trunk/mobile.sniffer
+
+Beta software
+-------------
+
+This software is still in much development and aimed for advanced Python developers only.
 
 Author
 ------
 
-`Twinapex Team <mailto:info@twinapex.com>`_ - Python and Plone professionals for hire.
+`mFabrik Research Oy <mailto:info@mfabrik.com>`_ - Python and Plone professionals for hire.
 
-* `Twinapex company site <http://www.twinapex.com>`_ (`Twinapex-yritysryhm� <http://www.twinapex.fi>`_)
+* `mFabrik web site <http://mfabrik.com>`_ 
 
-* `Twinapex company blog <http://blog.twinapex.fi>`_
+* `mFabrik mobile site <http://mfabrik.mobi>`_ 
 
-* `Twinapex mobile site <http://www.twinapex.mobi>`_
+* `Blog <http://blog.mfabrik.com>`_
 
-* `More about Plone <http://www.twinapex.com/products/plone>`_ (`Lis�tietoa Plone-julkaisuj�rjestelm�st� <http://www.twinapex.fi/tuotteet/plone>`_)
-
-* `Other open source Plone products by Twinapex <http://www.twinapex.com/for-developers/open-source/for-plone>`_
+* `About Plone CMS <http://mfabrik.com/technology/technologies/content-management-cms/plone>`_ 
 
 
 
