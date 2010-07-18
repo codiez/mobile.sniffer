@@ -4,7 +4,7 @@ Changelog
 0.1.1
 -----
 
-* Updated README to describe ther simple sniffer [miohtama]
+* Updated README to describe detection and redirects [miohtama]
 
 0.1
 -----
