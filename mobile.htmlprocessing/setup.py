@@ -12,7 +12,7 @@ setup(name='mobile.htmlprocessing',
       classifiers=[
         "Programming Language :: Python",
         ],
-      keywords='',
+      keywords='html xhtml mobile image processor',
       author='',
       author_email='',
       url='http://svn.plone.org/svn/collective/',

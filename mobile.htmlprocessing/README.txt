@@ -1,38 +1,37 @@
-.. contents ::
+.. contents :: local
 
 Introduction
 ------------
 
-mobile.htmlprocessing provides utilities to sanitize arbitary HTML for mobile output.
-
-The code will also filter possible malicious code in external feed content, like <script> tags.
-
-Requirements
-------------
-
-* Python 2.4
-
-* `lxml <http://pypi.python.org/pypi/lxml/>`_
-
-This package has no dependencies to Plone or Go Mobile and can be used with any Python code.
+``mobile.htmlprocessing`` is a Python package providing utilities to sanitize 
+arbitrary HTML content for outputting it to mobile devices.
 
 Features
 --------
 
 * Rewrite <img> tags so that images are resized for mobile viewing
 
-* Make arbitary input HTML to valid XHTML to more compatible with mobile phones
+* Make arbitraty input HTML to valid XHTML to more compatible with mobile phones
 
 * Enforce empty ALT text on images missing ALT attribute
 
 * Protect against Cross-Site Scripting Attacks (XSS) and other nastiness, as provided by
-  `lxml.html.clean  <http://codespeak.net/lxml/lxmlhtml.html#cleaning-up-html>`_
+  `lxml.html.clean  <http://codespeak.net/lxml/lxmlhtml.html#cleaning-up-html>`_. 
+  Both trusted HTML and non-trusted HTML processing modes are supported.
 
 * Unicode compliant - eats funky characters
 
-* Both trusted HTML and non-trusted HTML (may contain <script> and <iframe> etc.) 
-  modes
+This is a framework library which is designed to work with any web server or Python based CMS system.
+It allow rewrites HTML. You need to subclass and specialize provided base classes to match with your CMS
+paradigms. For examples, see `Go Mobile for Plone <http://pypi.python.org/pypi/gomobile.mobile/>`_
+CMS add-on product.
 
+Requirements
+------------
+
+* Python 2.4+
+
+* `lxml <http://pypi.python.org/pypi/lxml/>`_
 
 Usage
 -----
@@ -51,7 +50,7 @@ Run unit tests normally like::
 See also
 --------
 
-* `Plone GoMobile project <http://pypi.python.org/pypi/gomobile.mobile/>`_
+* `Go Mobile for Plone project <http://pypi.python.org/pypi/gomobile.mobile/>`_
 
 * http://en.wikipedia.org/wiki/XHTML_Mobile_Profile
 
@@ -59,7 +58,17 @@ See also
 
 * `W3C XHTML mobile validator <http://validator.w3.org/mobile/>`_
 
-* `mobiReady <http://mobiready.com/>`_
+Source code
+------------
+
+Source code is available via Google Code.
+
+* http://code.google.com/p/mobilesniffer/source/browse/#svn/trunk/mobile.htmlprocessing
+
+Beta software
+-------------
+
+This software is still in much development and aimed for advanced Python developers only.
 
 Author
 ------
@@ -71,3 +80,7 @@ Author
 * `mFabrik mobile site <http://mfabrik.mobi>`_ 
 
 * `Blog <http://blog.mfabrik.com>`_
+
+* `About Plone CMS <http://mfabrik.com/technology/technologies/content-management-cms/plone>`_ 
+
+
