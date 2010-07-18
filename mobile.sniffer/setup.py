@@ -8,7 +8,9 @@ setup(name='mobile.sniffer',
       description="Generic Python framework for mobile user agent detection",
       long_description=open("README.txt").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      classifiers=[
+        "Programming Language :: Python",
+        ],
       keywords='mobile django plone user-agent http sniffer',
       author='mFabrik Research Oy',
       author_email='research@mfabrik.com',
