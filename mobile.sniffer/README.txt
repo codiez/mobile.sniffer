@@ -1,16 +1,34 @@
 Introduction
 ------------
 
-``mobile.sniffer`` is Python framework for abstracting mobile handset databases.
+``mobile.sniffer`` is Python framework for abstracting mobile handset detection and feature database access.
 
 When rendering web pages for mobile phones one must deal with varying handset features: 
 different screen sizes and shapes, different supported file formats, different sets of web browser features. 
-Information about mobile phones is collected to databases and there are several databases available
-(Wurfl, DeviceAtlas, etc). ``mobile.sniffer`` framework aims to provide generic interface that you
-can easily plug-in different mobile handset databases without need to change your code. 
+Also, the fact that you know the user is browsing on a mobile phone is most critical for building
+successful mobile web user experience.
+
+``mobile.sniffer`` provides two phase mobile phone detection (a.k.a sniffing) 
+
+* *mobile detection* - this simply detects whether a browser is a mobile phone based or not.
+  This is done in ``mobile/sniffer/detect.py`` module. This is useful to redirect to your
+  visitors from a web site to a mobile site if they are using a mobile phone to arrive on your web site.
+  
+* *mobile handset feature extraction* - the handset database is looked for a mobile web browser
+  user agent match. Since there might be version changes, local varieties, etc. in user agent 
+  strings, heurestics are applied to the string matching. If a database entry is found, with
+  certain match accuracy, it's records like device screen width and height are made
+  available to the web server so that it can tailor HTML, image and video output suitable
+  for this particular mobile phone.
+
+Mobile detection can be done with a fast regular expression match. Mobile handset feature
+extraction always requires a some sort of database of mobile phone entries and mobile.sniffer framework
+provides abstraction of these databases.
 
 Features
 --------
+
+* Easily plug-in mobile redirects to your Python based web sites
 
 * Able to source data from multiple sniffing backends leading better handset coverage
 
@@ -22,7 +40,7 @@ Features
 
 * Unit test coverage
 
-The library is Django, WSGI and Zope/Plone compatible.
+The code is Django, WSGI and Zope/Plone compatible.
 
 Supported sniffing backends
 ----------------------------
@@ -71,8 +89,34 @@ There is no single standard to name properties queried from the handset database
 For legacy reasons, we use DeviceAtlas database column names (keys)
 and then map them to database-dependent keys. 
 
-Simple example
-======================
+Detection and redirect example
+====================================
+
+``detect_mobile_browser(user_agent)`` will return True of False
+whether the HTTP request was made by a mobile phone.
+
+Example::
+
+        from mobile.sniffer.detect import  detect_mobile_browser
+        from mobile.sniffer.utilities import get_user_agent
+
+        # Get HTTP_USER_AGENT from HTTP request object
+        ua = get_user_agent(self.request)
+        if ua:
+            # Apply reg
+            if detect_mobile_browser(ua):
+                # Redirect the visitor from a web site to a mobile site 
+                pass
+            else:
+                # A regular web site visitor
+                pass
+        else:
+            # User agent header is missing from HTTP request
+            return False
+    
+
+Feature extraction example
+===================================
 
 This example will work out of the box with the included pywurlf database.
 
