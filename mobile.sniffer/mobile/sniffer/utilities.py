@@ -8,7 +8,7 @@ try:
     from hashlib import md5
 except ImportError:
     # Python 2.4 
-    import md5
+    from md5 import new as md5
 
 def get_environ(request):
     """ Cross-python framework compatible way to extract HTTP headers from the request object.
@@ -62,7 +62,7 @@ def get_user_agent_hash(request):
     """
     user_agent =  get_user_agent(request)
     if user_agent:
-        user_agent_md5 = md5.new(user_agent).hexdigest()
+        user_agent_md5 = md5(user_agent).hexdigest()
     else:
         # User agent will be None in unit tests
         user_agent_md5 = ""
