@@ -3,7 +3,12 @@
     Misc. utilities to deal with HTTP user agent sniffing
 
 """
-import md5
+
+try:
+    from hashlib import md5
+except ImportError:
+    # Python 2.4 
+    import md5
 
 def get_environ(request):
     """ Cross-python framework compatible way to extract HTTP headers from the request object.
