@@ -126,6 +126,13 @@ class UserAgent(base.UserAgent):
             return self.device_object.max_image_width
         elif name == "usableDisplayHeight":
             return self.device_object.max_image_height
+        
+        # extra properties not supplied in trunk version
+        elif name == "model":
+            return self.device_object.model_name
+        elif name == "vendor":
+            return self.device_object.brand_name
+        
         else:
             return None
 
