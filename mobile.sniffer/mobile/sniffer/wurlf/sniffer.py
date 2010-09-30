@@ -62,7 +62,7 @@ class WurlfSniffer(base.Sniffer):
             # Unicodify
             agent = agent.decode("utf-8")
 
-        device = self.devices.select_ua(agent, search=self.search, filter_noise=True)
+        device = self.devices.select_ua(agent, search=self.search)
     
         # Fallback algo for convergence sites
         
